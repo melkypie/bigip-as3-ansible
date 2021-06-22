@@ -1,0 +1,11 @@
+DNS-google:
+  name: DNS-google
+  object: monitor
+  type: dns
+  receive: 8.8.8.8
+  queryName: google-public-dns-a.google.com
+
+ICMP-node:
+  name: ICMP-node
+  object: monitor
+  type: icmp

@@ -1,0 +1,5 @@
+{{ vars.name }}:
+    class: UDP_Profile
+{% if vars.datagramLoadBalancing is defined %}
+    datagramLoadBalancing: {{ vars.datagramLoadBalancing }}
+{% endif %}

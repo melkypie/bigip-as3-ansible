@@ -1,0 +1,14 @@
+{{ vars.name }}:
+    class: L4_Profile
+{% if vars.looseClose is defined %}
+    looseClose: {{ vars.looseClose }}
+{% endif %}
+{% if vars.looseInit is defined %}
+    looseInitialization: {{ vars.looseInit }}
+{% endif %}
+{% if vars.resetOnTimeout is defined %}
+    resetOnTimeout: {{ vars.resetOnTimeout }}
+{% endif %}
+{% if vars.tcpHandshakeTimeout is defined %}
+    tcpHandshakeTimeout: {{ vars.tcpHandshakeTimeout }}
+{% endif %}

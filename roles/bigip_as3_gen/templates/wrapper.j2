@@ -1,0 +1,43 @@
+$schema: https://raw.githubusercontent.com/F5Networks/f5-appsvcs-extension/master/schema/3.26.1/as3-schema.json
+class: AS3
+declaration:
+    class: ADC
+    schemaVersion: 3.26.0
+    id: declaration-0
+    updateMode: complete
+{% if tenants is defined and tenants is not none %}
+{%     if global.tenants is defined and global.tenants is not none %}
+{%         set tenants = global.tenants | combine(tenants, recursive=True, list_merge='append_rp') %}
+{%     endif %}
+{%     for tenant in tenants %}
+{%         if tenants[tenant].apps is defined and tenants[tenant].apps | length > 0 %}
+    {{ tenant }}:
+        class: Tenant
+{%             for app in tenants[tenant].apps | sort %}
+        {{ app }}:
+            class: Application
+{%                 set app_vars = hostvars[inventory_hostname][app]%}
+{%                 filter indent(width=12, first=True) %}
+{%                     include 'app/templates/' ~ app_vars.type ~ '.j2' %}
+{%                 endfilter %}
+{%             endfor %}
+{%         endif %}
+{%     endfor %}
+{% endif %}
+{% if common is defined and common is not none %}
+{%     if global.common is defined and global.common is not none %}
+{%         set common = global.common | combine(common, recursive=True, list_merge='append_rp') %}
+{%     endif %}
+    Common:
+        class: Tenant
+        Shared:
+            class: Application
+            template: shared
+{%     for object in common.objects | sort %}
+{%         with vars = hostvars[inventory_hostname][object] %}
+{%             filter indent(width=12, first=True) %}
+{%                 include 'app/objects/' ~ vars.object ~ '.j2' %}
+{%             endfilter %}
+{%         endwith %}
+{%     endfor %}
+{% endif %}

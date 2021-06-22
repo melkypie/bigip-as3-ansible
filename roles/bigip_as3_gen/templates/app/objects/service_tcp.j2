@@ -1,0 +1,48 @@
+{{ vars.name }}:
+    class: Service_TCP
+    pool: {{ vars.pool.name }}
+    virtualPort: {{ vars.port }}
+    virtualAddresses:
+{% for vip in vars.vips %}
+{%     if vip.source is defined %}
+        - [{{ vip.ip }}, {{ vip.source }}]
+{%     else %}
+       - {{ vip.ip }}
+{%     endif %}
+{% endfor %}
+{% if vars.snat is defined and vars.snat.name is defined %}
+    snat:
+        use: {{ vars.snat.name }}
+{% elif vars.snat is defined and vars.snat is string %}
+    snat: {{ vars.snat }}
+{% endif %}
+{% if vars.fw.enforced is defined %}
+    policyFirewallEnforced:
+      bigip: {{ vars.fw.enforced }}
+{% endif %}
+{% if vars.persistenceMethods is defined %}
+{%     if vars.persistenceMethods == "none"%}
+    persistenceMethods: []
+{%     else %}
+    persistenceMethods:
+{%         for pMethod in vars.persistenceMethods %}
+        - {{ pMethod }}
+{%         endfor %}
+{%     endif %}
+{% endif %}
+{% if vars.profile is defined and vars.profile.tcp is defined and vars.profile.tcp is not none %}
+    profileTCP:
+        use: {{ vars.profile.tcp.name }}
+{% endif %}
+{% if vars.iRules is defined %}
+    iRules:
+{%     for iRule in vars.iRules %}
+        - use: {{ iRule.name }}
+{%     endfor %}
+{% endif %}
+{% if vars.vlans is defined %}
+    allowVlans:
+{%     for vlan in vars.vlans %}
+        - bigip: {{ vlan }}
+{%     endfor %}
+{% endif %}

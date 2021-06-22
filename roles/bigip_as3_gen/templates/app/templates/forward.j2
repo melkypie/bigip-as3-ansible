@@ -1,0 +1,29 @@
+{# Service_Forwarding #}
+{% with vars = app_vars %}
+{%     include 'app/objects/service_forwarding.j2' %}
+{% endwith %}
+{# iRule #}
+{% if app_vars.iRules is defined %}
+{%     for irule in app_vars.iRules %}
+{%         if irule.location is not defined or irule.location != "common" %}
+{%             with vars = app_vars.iRules %}
+{%                 include 'app/objects/irule.j2' %}
+{%             endwith %}
+{%         endif %}
+{%     endfor %}
+{% endif %}
+{# Profiles #}
+{% if app_vars.profile is defined %}
+{# L4_Profile #}
+{%     if app_vars.profile.l4 is defined and (app_vars.profile.l4.location is not defined or app_vars.profile.l4.location != "common") %}
+{%         with vars = app_vars.profile.l4 %}
+{%             include 'app/objects/l4_profile.j2' %}
+{%         endwith %}
+{%     endif %}
+{% endif %}
+{# SNAT_Pool #}
+{% if app_vars.snat is defined and app_vars.snat.snatAddresses is defined %}
+{%     with vars = app_vars.profile.snat %}
+{%         include 'app/objects/snat_pool.j2' %}
+{%     endwith %}
+{% endif %}

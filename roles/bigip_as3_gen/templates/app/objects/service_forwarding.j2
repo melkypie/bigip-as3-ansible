@@ -1,0 +1,43 @@
+{{ vars.name }}:
+    class: Service_Forwarding
+    forwardingType: {{ vars.forwardType }}
+    virtualPort: {{ vars.port }}
+    virtualAddresses:
+{% for vip in vars.vips %}
+{%     if vip.source is defined %}
+        - [{{ vip.ip }}, {{ vip.source }}]
+{%     else %}
+       - {{ vip.ip }}
+{%     endif %}
+{% endfor %}
+{% if vars.l4 is defined %}
+    layer4: {{ vars.l4 }}
+{% endif %}
+{% if vars.snat is defined and vars.snat.name is defined %}
+    snat:
+        use: {{ vars.snat.name }}
+{% elif vars.snat is defined and vars.snat is string %}
+    snat: {{ vars.snat }}
+{% endif %}
+{% if vars.fw.enforced is defined %}
+    policyFirewallEnforced:
+        - bigip: {{ vars.fw.enforced }}
+{% endif %}
+{% if vars.profile is defined %}
+{%     if vars.profile.l4 is defined %}
+    profileL4:
+        use: {{ vars.profile.l4.name }}
+{%     endif %}
+{% endif%}
+{% if vars.iRules is defined %}
+    iRules:
+{%     for iRule in vars.iRules %}
+        - use: {{ iRule.name }}
+{%     endfor %}
+{% endif %}
+{% if vars.vlans is defined %}
+    allowVlans:
+{%     for vlan in vars.vlans %}
+        - bigip: {{ vlan }}
+{%     endfor %}
+{% endif %}

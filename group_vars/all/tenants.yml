@@ -1,0 +1,13 @@
+backup_dir: "{{ playbook_dir }}/backup"
+
+global:
+  tenants:
+    TENANT:
+      apps:
+        - APP-forward-net
+  common:
+    objects:
+      - ICMP-node
+      - UDP-dns
+      - DNS-google
+      - FL4-forward

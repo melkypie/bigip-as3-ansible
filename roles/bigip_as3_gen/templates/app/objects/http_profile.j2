@@ -1,0 +1,8 @@
+{{ vars.name }}:
+    class: HTTP_Profile
+{% if vars.viaRequest is defined %}
+    viaRequest: {{ vars.viaRequest }}
+{% endif %}
+{% if vars.viaResponse is defined %}
+    viaResponse: {{ vars.viaResponse }}
+{% endif %}

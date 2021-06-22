@@ -1,0 +1,78 @@
+{# Service_HTTPS #}
+{% with vars = app_vars %}
+{%     include 'app/objects/service_https.j2' %}
+{% endwith %}
+{# Pool #}
+{% with vars = app_vars.pool %}
+{%     include 'app/objects/pool.j2' %}
+{% endwith %}
+{# TLS_Server #}
+{% if app_vars.tls is defined %}
+{%     with vars = app_vars.tls %}
+{%         include 'app/objects/tls_server.j2' %}
+{%     endwith %}
+{# Certificates #}
+{%     if app_vars.tls.certs is defined %}
+{%         for cert in app_vars.tls.certs %}
+{%             if cert.location is not defined or cert.location != "common" %}
+{%                 with vars = cert %}
+{%                     include 'app/objects/certificate.j2' %}
+{%                 endwith %}
+{%             endif %}
+{%         endfor %}
+{%     endif %}
+{% endif %}
+{# iRule #}
+{% if app_vars.iRules is defined %}
+{%     for irule in app_vars.iRules %}
+{%         if irule.location is not defined or irule.location != "common" %}
+{%             with vars = irule %}
+{%                 include 'app/objects/irule.j2' %}
+{%             endwith %}
+{%         endif %}
+{%     endfor %}
+{% endif %}
+{# Pool Monitors #}
+{% if app_vars.pool is defined %}
+{%     if app_vars.pool.monitors is defined %}
+{%         for monitor in app_vars.pool.monitors %}
+{%             if monitor.location is not defined or monitor.location != "common" %}
+{%                 with vars = monitor %}
+{%                     include 'app/objects/monitor.j2' %}
+{%                 endwith %}
+{%             endif %}
+{%         endfor %}
+{%     endif %}
+{# Pool Member Monitors #}
+{%     if app_vars.pool.members is defined %}
+{%         for member in app_vars.pool.members %}
+{%             if member.monitors is defined %}
+{%                 for monitor in member.monitors %}
+{%                     if monitor.location is not defined or monitor.location != "common" %}
+{%                         with vars = monitor %}
+{%                             include 'app/objects/monitor.j2' %}
+{%                         endwith %}
+{%                     endif %}
+{%                 endfor %}
+{%             endif %}
+{%         endfor %}
+{%     endif %}
+{% endif %}
+{# HTTP_Profile #}
+{% if app_vars.profile is defined and app_vars.profile.http is defined and (app_vars.profile.http.location is not defined or app_vars.profile.http.location != "common") %}
+{%     with vars = app_vars.profile.http %}
+{%         include 'app/objects/http_profile.j2' %}
+{%     endwith %}
+{% endif %}
+{# TCP_Profile #}
+{% if app_vars.profile is defined and app_vars.profile.tcp is defined and (app_vars.profile.tcp.location is not defined or app_vars.profile.tcp.location != "common") %}
+{%     with vars = app_vars.profile.tcp %}
+{%         include 'app/objects/tcp_profile.j2' %}
+{%     endwith %}
+{% endif %}
+{# SNAT_Pool #}
+{% if app_vars.snat is defined and app_vars.snat.snatAddresses is defined %}
+{%     with vars = app_vars.profile.snat %}
+{%         include 'app/objects/snat_pool.j2' %}
+{%     endwith %}
+{% endif %}

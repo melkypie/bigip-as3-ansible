@@ -1,0 +1,23 @@
+{{ vars.name }}:
+    class: Pool
+    loadBalancingMode: {{ vars.lbMode }}
+{% if vars.members is defined and vars.members is not none %}
+    members:
+{%     for member in vars.members %}
+        - servicePort: {{ member.port }}
+          serverAddresses:
+            - {{ member.addr }}
+{%         if member.monitors is defined and member.monitors is not none %}
+          monitors:
+{%             for monitor in member.monitors %}
+            - use: {{ monitor.name }}
+{%             endfor %}
+{%         endif %}
+{%     endfor %}
+{% endif %}
+{% if vars.monitors is defined and vars.monitors is not none %}
+    monitors:
+{%     for monitor in vars.monitors %}
+        - use: {{ monitor.name }}
+{%     endfor %}
+{% endif %}

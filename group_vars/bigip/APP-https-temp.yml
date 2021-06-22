@@ -1,0 +1,40 @@
+APP-https-temp:
+  type: https
+  name: APP-https-temp
+  persistenceMethods:
+    - source-address
+  vips:
+    - ip: 10.20.20.2
+  pool:
+    name: Pool-https-temp
+    lbMode: least-connections-member
+    members:
+      - addr: 10.20.20.3
+        port: 80
+        monitors:
+          - name: /Common/Shared/ICMP-node
+            location: common
+    monitors:
+      - name: HTTP-https-temp
+        type: http
+        receive: OK
+        send: 'GET /check_health'
+  tls:
+    name: TLS-https-temp-secure
+    cipherGroup: /Common/f5-secure
+    certs:
+      - name: Cert-https-temp
+        key: /Common/default.key
+        cert: /Common/default.crt
+        #chain: /Common/cefault.chain
+        #passphrase:
+        #  value: cGFzc3dvcmQ=
+        #  type: none
+  profile:
+    http:
+      name: HProfile-https-temp
+    tcp:
+      name: /Common/Shared/TCP-lan
+      location: common
+  vlans:
+    - /Common/vlan1

@@ -1,0 +1,32 @@
+- name: Deploy AS3 to BIGIP
+  uri:
+    url: "https://{{ hostvars[inventory_hostname].ansible_host }}/mgmt/shared/appsvcs/declare?async=true"
+    method: POST
+    user: "{{ admin_user }}"
+    password: "{{ admin_password }}"
+    validate_certs: no
+    body: "{{ lookup('file', '{{ backup_dir }}/json/{{ inventory_hostname }}.json') }}"
+    body_format: json
+    status_code: [200, 202]
+  register: result
+  no_log: true
+  
+- name: Wait for task completion
+  uri:
+    url: "https://{{ hostvars[inventory_hostname].ansible_host }}/mgmt/shared/appsvcs/task/{{ result.json.id }}"
+    status_code: 200
+    user: "{{ admin_user }}"
+    password: "{{ admin_password }}"
+    validate_certs: no
+  register: response
+  no_log: true
+  until: response.json.results | selectattr("message", "equalto", "in progress") | list | count < 1
+  retries: 10
+  delay: 10
+  
+- name: Print result
+  debug:
+    var: response.json.results
+  # 422 is invalid configuration
+  failed_when: response.status == 422 or response.json.results | selectattr("message", "ne", "success") | selectattr("message", "ne", "no change") | list | count >= 1
+  changed_when: response.json.results | selectattr("message", "equalto", "success") | list | count >= 1

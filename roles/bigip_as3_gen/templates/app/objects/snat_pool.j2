@@ -1,0 +1,8 @@
+{{ vars.name }}:
+    class: SNAT_Pool
+{% if vars.snatAddresses is defined %}
+    snatAddresses:
+{%     for addr in vars.snatAddresses %}
+        - {{ addr }}
+{%     endfor %}
+{% endif %}

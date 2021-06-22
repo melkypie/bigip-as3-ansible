@@ -1,0 +1,66 @@
+{# Service_TCP #}
+{% if app_vars.tcp is defined %}
+{%     with vars = app_vars.copy() | combine(app_vars.tcp, recursive=True, list_merge='append_rp') %}
+{%         if vars.port is not defined %}
+{%             do vars.update({"port": 53}) %}
+{%         endif %}
+{%         include 'app/objects/service_tcp.j2' %}
+{%     endwith %}
+{% endif %}
+{# Service_UDP #}
+{% if app_vars.udp is defined %}
+{%     with vars = app_vars.copy() | combine(app_vars.udp, recursive=True, list_merge='append_rp') %}
+{%         if vars.port is not defined %}
+{%             do vars.update({"port": 53}) %}
+{%         endif %}
+{%         include 'app/objects/service_udp.j2' %}
+{%     endwith %}
+{% endif %}
+{# Pool #}
+{% with vars = app_vars.pool %}
+{%     include 'app/objects/pool.j2' %}
+{% endwith %}
+{# Pool Monitors #}
+{% if app_vars.pool is defined %}
+{%     if app_vars.pool.monitors is defined %}
+{%         for monitor in app_vars.pool.monitors %}
+{%             if monitor.location is not defined or monitor.location != "common" %}
+{%                 with vars = monitor %}
+{%                     include 'app/objects/monitor.j2' %}
+{%                 endwith %}
+{%             endif %}
+{%         endfor %}
+{%     endif %}
+{# Pool Member Monitors #}
+{%     if app_vars.pool.members is defined %}
+{%         for member in app_vars.pool.members %}
+{%             if member.monitors is defined %}
+{%                 for monitor in member.monitors %}
+{%                     if monitor.location is not defined or monitor.location != "common" %}
+{%                         with vars = monitor %}
+{%                             include 'app/objects/monitor.j2' %}
+{%                         endwith %}
+{%                     endif %}
+{%                 endfor %}
+{%             endif %}
+{%         endfor %}
+{%     endif %}
+{% endif %}
+{# TCP_Profile #}
+{% if app_vars.profile is defined and app_vars.profile.tcp is defined and (app_vars.profile.tcp.location is not defined or app_vars.profile.tcp.location != "common") %}
+{%     with vars = app_vars.profile.tcp %}
+{%         include 'app/objects/tcp_profile.j2' %}
+{%     endwith %}
+{% endif %}
+{# UDP_Profile #}
+{% if app_vars.profile is defined and app_vars.profile.udp is defined and (app_vars.profile.udp.location is not defined or app_vars.profile.udp.location != "common") %}
+{%     with vars = app_vars.profile.udp %}
+{%         include 'app/objects/udp_profile.j2' %}
+{%     endwith %}
+{% endif %}
+{# SNAT_Pool #}
+{% if app_vars.snat is defined and app_vars.snat.snatAddresses is defined %}
+{%     with vars = app_vars.snat %}
+{%         include 'app/objects/snat_pool.j2' %}
+{%     endwith %}
+{% endif %}

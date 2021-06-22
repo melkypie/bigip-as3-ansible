@@ -1,0 +1,15 @@
+{{ vars.name }}:
+    class: Certificate
+    certificate:
+        bigip: {{ vars.cert }}
+    privateKey:
+        bigip: {{ vars.key }}
+{% if vars.passphrase is defined %}
+    passphrase:
+        ciphertext: {{ vars.passphrase.value }}
+        protected: {{ ('{"alg":"dir","enc":"' ~ vars.passphrase.type ~ '"}') | b64encode }}
+{% endif %}
+{% if vars.chain is defined %}
+    chainCA:
+        bigip: {{ vars.chain }}
+{% endif %}

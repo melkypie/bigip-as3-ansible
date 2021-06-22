@@ -1,0 +1,28 @@
+APP-dns:
+  type: dns
+  tcp:
+    name: VS-dns
+  udp:
+    name: VS-dns
+  snat: none
+  persistenceMethods: none
+  pool:
+    name: Pool-dns
+    lbMode: least-connections-member
+    members:
+      - addr: 10.40.40.3
+        port: 53
+      - addr: 10.40.40.4
+        port: 53
+    monitors:
+      - name: /Common/Shared/DNS-google
+        location: common
+  vips:
+    - ip: 10.40.40.2
+  profile:
+    tcp:
+      name: /Common/Shared/TCP-lan
+      location: common
+    udp:
+      name: /Common/Shared/UDP-dns
+      location: common

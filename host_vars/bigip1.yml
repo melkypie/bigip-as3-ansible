@@ -1,0 +1,9 @@
+tenants:
+  TENANT:
+    apps:
+      - APP-https-temp
+      - APP-dns
+
+# common:
+#   objects:
+#     - iRule-random

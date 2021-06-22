@@ -1,0 +1,4 @@
+*.retry
+backup/json/*.json
+backup/yaml/*.yml
+.env

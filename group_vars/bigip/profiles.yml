@@ -1,0 +1,28 @@
+# Made as close as possible to be like f5-tcp-lan profile
+TCP-lan:
+  name: TCP-lan
+  object: tcp_profile
+  minimumRto: 200
+  proxyBufferHigh: 65535
+  proxyBufferLow: 32768
+  receiveWindowSize: 65535
+  sendBufferSize: 65535
+  autoProxyBufferSize: false
+  autoReceiveWindowSize: false
+  autoSendBufferSize: false
+  congestionControl: high-speed
+  maxSegmentSize: 1460
+  pushFlag: default
+
+UDP-dns:
+  name: UDP-dns
+  object: udp_profile
+  datagramLoadBalancing: true
+
+FL4-forward:
+  name: FL4-forward
+  object: l4_profile
+  looseClose: true
+  looseInit: true
+  resetOnTimeout: false
+  tcpHandshakeTimeout: 10

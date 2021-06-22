@@ -1,0 +1,21 @@
+{{ vars.name }}:
+    class: Monitor
+    monitorType: {{ vars.type }}
+{% if vars.receive is defined %}
+    receive: {{ vars.receive }}
+{% endif %}
+{% if vars.send is defined %}
+    send: '{{ vars.send }}'
+{% endif %}
+{% if vars.port is defined %}
+    targetPort: {{ vars.port }}
+{% endif %}
+{% if vars.queryType is defined %}
+    queryType: '{{ vars.queryType }}'
+{% endif %}
+{% if vars.queryName is defined %}
+    queryName: '{{ vars.queryName }}'
+{% endif %}
+{% if vars.transparent is defined %}
+    transparent: {{ vars.transparent }}
+{% endif %}

@@ -1,0 +1,10 @@
+{{ vars.name }}:
+    class: TLS_Server
+{% if vars.cipherGroup is defined %}
+    cipherGroup: 
+        bigip: {{ vars.cipherGroup }}
+{% endif %}
+    certificates:
+{% for cert in vars.certs %}
+        - certificate: {{ cert.name }}
+{% endfor %}

@@ -1,0 +1,44 @@
+{{ vars.name }}:
+    class: TCP_Profile
+{% if vars.autoProxyBufferSize is defined %}
+    autoProxyBufferSize: {{ vars.autoProxyBufferSize }}
+{% endif %}
+{% if vars.autoReceiveWindowSize is defined %}
+    autoReceiveWindowSize: {{ vars.autoReceiveWindowSize }}
+{% endif %}
+{% if vars.autoSendBufferSize is defined %}
+    autoSendBufferSize: {{ vars.autoSendBufferSize }}
+{% endif %}
+{% if vars.minimumRto is defined %}
+    minimumRto: {{ vars.minimumRto }}
+{% endif %}
+{% if vars.proxyBufferHigh is defined %}
+    proxyBufferHigh: {{ vars.proxyBufferHigh }}
+{% endif %}
+{% if vars.proxyBufferLow is defined %}
+    proxyBufferLow: {{ vars.proxyBufferLow }}
+{% endif %}
+{% if vars.receiveWindowSize is defined %}
+    receiveWindowSize: {{ vars.receiveWindowSize }}
+{% endif %}
+{% if vars.sendBufferSize is defined %}
+    sendBufferSize: {{ vars.sendBufferSize }}
+{% endif %}
+{% if vars.initRwnd is defined %}
+    initRwnd: {{ vars.initRwnd }}
+{% endif %}
+{% if vars.maxSegmentSize is defined %}
+    maxSegmentSize: {{ vars.maxSegmentSize }}
+{% endif %}
+{% if vars.nagle is defined %}
+    nagle: {{ vars.nagle }}
+{% endif %}
+{% if vars.pushFlag is defined %}
+    pushFlag: {{ vars.pushFlag }}
+{% endif %}
+{% if vars.congestionControl is defined %}
+    congestionControl: {{ vars.congestionControl }}
+{% endif %}
+{% if vars.initCwnd is defined %}
+    initCwnd: {{ vars.initCwnd }}
+{% endif %}

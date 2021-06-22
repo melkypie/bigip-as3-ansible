@@ -1,0 +1,10 @@
+---
+- name: Deploy BIGIP configuration
+  hosts: all
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Deploy AS3
+      import_role:
+        name: bigip_as3_deploy
